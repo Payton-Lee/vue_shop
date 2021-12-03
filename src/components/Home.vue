@@ -12,13 +12,16 @@
 			<!-- 页面主体区域 -->
       <el-container>
 				<!-- 侧边栏 -->
-        <el-aside width="200px">
+        <el-aside :width="isCollapse ? '64px' : '200px'">
+					<div class="toggle-button" @click="toggleCollapse">|||</div>
 					<!-- 侧边栏菜单区域 -->
 					<el-menu
 						background-color="#333744"
 						text-color="#fff"
 						active-text-color="#409efe"
 						:unique-opened="true"
+						:collapse="isCollapse"
+						:collapse-transition="false"
 						>
 						<!-- 一级菜单 -->
 						<el-submenu :index="item.id +''" v-for="item in menuList" :key="item.id">
@@ -59,7 +62,9 @@ export default {
 				'101': 'iconfont icon-shangpin',
 				'102': 'iconfont icon-danju',
 				'145': 'iconfont icon-baobiao'
-			}
+			},
+			// 是否折叠
+			isCollapse: false
 		}
 	},
 	created() {
@@ -76,6 +81,10 @@ export default {
 			if(res.meta.status !== 200) return this.$message.error(res.meta.msg)
 			this.menuList = res.data
 			console.log(res);
+		},
+		// 点击按钮切换菜单的折叠和展开 
+		toggleCollapse() {
+			this.isCollapse = !this.isCollapse
 		}
   },
 };
@@ -112,5 +121,14 @@ export default {
 }
 .iconfont {
 	margin-right: 10px;
+}
+.toggle-button {
+	background-color: #4a5064;
+	color: #fff;
+	font-size: 10px;
+	line-height: 24px;
+	text-align: center;
+	letter-spacing: 0.2em;
+	cursor: pointer;
 }
 </style>
