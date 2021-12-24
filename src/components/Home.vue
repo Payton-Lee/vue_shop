@@ -35,7 +35,12 @@
 							<span>{{ item.authName }}</span>
 						</template>
 						<!-- 二级菜单 -->
-						<el-menu-item :index="'/' + subItem.path" v-for="subItem in item.children" :key="subItem.id" @click="saveNavState('/' + subItem.path)">
+						<el-menu-item
+							:index="'/' + subItem.path"
+							v-for="subItem in item.children"
+							:key="subItem.id"
+							@click="saveNavState('/' + subItem.path)"
+						>
 							<template slot="title">
 								<!-- 图标 -->
 								<i class="el-icon-menu"></i>
@@ -95,7 +100,7 @@ export default {
 			this.isCollapse = !this.isCollapse
 		},
 		// 保存链接的激活状态
-		saveNavState(activePath){
+		saveNavState(activePath) {
 			window.sessionStorage.setItem('activePath', activePath)
 			this.activePath = activePath
 		}
