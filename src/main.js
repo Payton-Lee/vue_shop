@@ -6,6 +6,8 @@ import './plugins/element.js'
 import './assets/css/global.css'
 // 導入字體圖標
 import './assets/fonts/iconfont.css'
+// 
+import ZkTable from 'vue-table-with-tree-grid'
 
 import axios from 'axios'
 // 配置請求根路徑
@@ -17,6 +19,8 @@ axios.interceptors.request.use(config => {
 Vue.prototype.$http = axios
 
 Vue.config.productionTip = false
+
+Vue.component('tree-table', ZkTable)
 
 new Vue({
   router,

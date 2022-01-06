@@ -31,13 +31,27 @@
               <!-- 渲染二级和三级权限 -->
               <el-col :span="19">
                 <!-- 通过  for循环嵌套循环二级权限-->
-                <el-row :class="[i2 === 0 ? '': 'bdtop', 'vcenter']" v-for="(item2, i2) in item1.children" :key="item2.id">
+                <el-row
+                  :class="[i2 === 0 ? '' : 'bdtop', 'vcenter']"
+                  v-for="(item2, i2) in item1.children"
+                  :key="item2.id"
+                >
                   <el-col :span="6">
-                    <el-tag type="success" closable @close="removeRightById(scope.row, item2.id)">{{ item2.authName }}</el-tag>
+                    <el-tag
+                      type="success"
+                      closable
+                      @close="removeRightById(scope.row, item2.id)"
+                    >{{ item2.authName }}</el-tag>
                     <i class="el-icon-caret-right"></i>
                   </el-col>
                   <el-col :span="18">
-                    <el-tag closable @close="removeRightById(scope.row, item3.id)" type="warning" v-for="(item3) in item2.children" :key="item3.id">{{ item3.authName }}</el-tag>
+                    <el-tag
+                      closable
+                      @close="removeRightById(scope.row, item3.id)"
+                      type="warning"
+                      v-for="(item3) in item2.children"
+                      :key="item3.id"
+                    >{{ item3.authName }}</el-tag>
                   </el-col>
                 </el-row>
               </el-col>
@@ -52,7 +66,12 @@
           <template slot-scope="scope">
             <el-button type="primary" icon="el-icon-edit" size="mini">编辑</el-button>
             <el-button type="danger" icon="el-icon-delete" size="mini">删除</el-button>
-            <el-button type="warning" icon="el-icon-setting" size="mini" @click="showSetRightDialog(scope.row)">分配权限</el-button>
+            <el-button
+              type="warning"
+              icon="el-icon-setting"
+              size="mini"
+              @click="showSetRightDialog(scope.row)"
+            >分配权限</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -61,9 +80,18 @@
       title="分配权限"
       :visible.sync="setDidlogDialogVisible"
       width="30%"
-      @close="setDidlogDialogClosed">
+      @close="setDidlogDialogClosed"
+    >
       <!-- 树形控件 -->
-      <el-tree :data="rightsList" :props="treeProps" show-checkbox node-key="id" default-expand-all :default-checked-keys="defKyes" ref="treeRef"></el-tree>
+      <el-tree
+        :data="rightsList"
+        :props="treeProps"
+        show-checkbox
+        node-key="id"
+        default-expand-all
+        :default-checked-keys="defKyes"
+        ref="treeRef"
+      ></el-tree>
       <span slot="footer" class="dialog-footer">
         <el-button @click="setDidlogDialogVisible = false">取 消</el-button>
         <el-button type="primary" @click="allowRights">确 定</el-button>
@@ -115,11 +143,11 @@ export default {
         type: 'warning'
       }).catch(err => err)
 
-      if(confirmResult !== 'confirm') {
+      if (confirmResult !== 'confirm') {
         return this.$message.info('取消了删除')
       }
-      const {data:res} = await this.$http.delete(`roles/${role.id}/rights/${rightId}`)
-      if(res.meta.status !== 200) {
+      const { data: res } = await this.$http.delete(`roles/${role.id}/rights/${rightId}`)
+      if (res.meta.status !== 200) {
         return this.$message.error('删除权限失败！')
       }
       // 防止全部刷新，提升用户体验
@@ -129,10 +157,10 @@ export default {
     async showSetRightDialog(role) {
       // 获取所有权限的数据
       this.roleId = role.id
-      const {data: res} = await this.$http.get('rights/tree')
-      if(res.meta.status !== 200) {
-        this.$message.error('获取权限数据失败！') 
-      } 
+      const { data: res } = await this.$http.get('rights/tree')
+      if (res.meta.status !== 200) {
+        this.$message.error('获取权限数据失败！')
+      }
       // 将获取到的权限数据保存到data中
       this.rightsList = res.data
       // console.log(this.rightsList);
@@ -143,7 +171,7 @@ export default {
     // 根据递归的形式，获取角色下所有三级权限的id，并保存到 defKeys 数组中
     getLeafKeys(node, arr) {
       // 如果当前的node节点不包含childern属性，则是三级节点
-      if(!node.children) {
+      if (!node.children) {
         return arr.push(node.id)
       }
       node.children.forEach(item => this.getLeafKeys(item, arr))
@@ -160,13 +188,13 @@ export default {
       ]
       // console.log(keys);
       const idStr = keys.join(',')
-      const {data: res} = await this.$http.post(`roles/${this.roleId}/rights`, {rids: idStr})
-      if(res.meta.status !== 200) {
+      const { data: res } = await this.$http.post(`roles/${this.roleId}/rights`, { rids: idStr })
+      if (res.meta.status !== 200) {
         this.$message.error('分配权限失败！')
       }
       this.$message.success('分配权限成功！')
       this.getRolesList()
-      this.setDidlogDialogVisible= false
+      this.setDidlogDialogVisible = false
     }
 
   }

@@ -52,7 +52,12 @@
             ></el-button>
             <!-- 分配角色按钮 -->
             <el-tooltip effect="dark" content="分配角色" placement="top" :enterable="false">
-              <el-button type="warning" icon="el-icon-setting" size="mini" @click="setRole(scope.row)"></el-button>
+              <el-button
+                type="warning"
+                icon="el-icon-setting"
+                size="mini"
+                @click="setRole(scope.row)"
+              ></el-button>
             </el-tooltip>
           </template>
         </el-table-column>
@@ -114,18 +119,20 @@
       title="分配角色"
       :visible.sync="setRoleDialogVisible"
       width="50%"
-      @close="setDialogClosed">
+      @close="setDialogClosed"
+    >
       <div>
-        <p>当前的用户： {{userInfo.username}}</p>
-        <p>当前的角色： {{userInfo.role_name}}</p>
-        <p>分配新角色： 
+        <p>当前的用户： {{ userInfo.username }}</p>
+        <p>当前的角色： {{ userInfo.role_name }}</p>
+        <p>
+          分配新角色：
           <el-select v-model="selectedRoleId" placeholder="请选择">
             <el-option
               v-for="item in roleList"
               :key="item.id"
               :label="item.roleName"
-              :value="item.id">
-            </el-option>
+              :value="item.id"
+            ></el-option>
           </el-select>
         </p>
       </div>
@@ -366,9 +373,9 @@ export default {
       if (confirmResult !== 'confirm') {
         return this.$message.info('已经取消删除')
       }
-      const {data: res} = await this.$http.delete('users/' + id)
+      const { data: res } = await this.$http.delete('users/' + id)
       console.log(res);
-      if(res.meta.status !== 200){
+      if (res.meta.status !== 200) {
         return this.$message.error('删除用户失败！')
       }
 
@@ -380,8 +387,8 @@ export default {
     async setRole(userInfo) {
       this.userInfo = userInfo
       // 在展示对话框之前获取所有的角色列表
-      const{data: res}  = await this.$http.get('roles')
-      if(res.meta.status !== 200) {
+      const { data: res } = await this.$http.get('roles')
+      if (res.meta.status !== 200) {
         return this.$message.error('获取角色列表失败！')
       }
       this.roleList = res.data
@@ -391,11 +398,11 @@ export default {
     },
     // 点击按钮，分配角色
     async saveRoleInfo() {
-      if(!this.selectedRoleId) {
+      if (!this.selectedRoleId) {
         return this.$message.error('请选择要分配的角色！')
       }
-      const {data: res} = await this.$http.put(`users/${this.userInfo.id}/role`, {rid: this.selectedRoleId})
-      if(res.meta.status !== 200) {
+      const { data: res } = await this.$http.put(`users/${this.userInfo.id}/role`, { rid: this.selectedRoleId })
+      if (res.meta.status !== 200) {
         return this.$message.error('更新角色失败！')
       }
       this.$message.success('更新角色成功！')
