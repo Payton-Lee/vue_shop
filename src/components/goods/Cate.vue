@@ -223,7 +223,7 @@ export default {
         // 为当前分类的等级赋值
         this.addCateFrom.cat_level = this.selectedKeys.length
         return
-      }else{
+      } else {
         // 父级分类的id
         this.addCateFrom.cat_pid = 0
         // 为当前分类的等级赋值
@@ -234,9 +234,9 @@ export default {
     addCate() {
       // console.log(this.addCateFrom);
       this.$refs.addCateFromRef.validate(async valid => {
-        if(!valid) return
-        const {data: res} = await this.$http.post('categories', this.addCateFrom)
-        if(res.meta.status !== 201) {
+        if (!valid) return
+        const { data: res } = await this.$http.post('categories', this.addCateFrom)
+        if (res.meta.status !== 201) {
           return this.$message.error('添加分类失败！')
         }
         this.$message.success('添加分类成功！')

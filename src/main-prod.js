@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import App from './App.vue'
 import router from './router'
-import './plugins/element.js'
+
 // 导入全局样式表
 import './assets/css/global.css'
 // 導入字體圖標
@@ -11,15 +11,24 @@ import ZkTable from 'vue-table-with-tree-grid'
 // 引入富文本框编辑器
 import VueQuillEditor from 'vue-quill-editor'
 // d导入富文本编辑器的样式
-import 'quill/dist/quill.core.css' // import styles
-import 'quill/dist/quill.snow.css' // for snow theme
-import 'quill/dist/quill.bubble.css' // for bubble theme
+// 导入NPregress 包对应的JS 和 CSS, NProgress 实现进度条效果
+import NProgress from 'nprogress'
 
 import axios from 'axios'
 // 配置請求根路徑
 axios.defaults.baseURL = 'http://127.0.0.1:8888/api/private/v1/'
+// 在request拦截器中展示进度条 NProgress.start()
 axios.interceptors.request.use(config => {
+  // 发起请求的时候进度条开始
+  NProgress.start()
   config.headers.Authorization = window.sessionStorage.getItem('token')
+  // 在最后必须 return config
+  return config
+})
+// 在response 拦截器中，隐藏进度条 NProgress.done()
+axios.interceptors.response.use(config => {
+  // 请求返回的时候进度条消失
+  NProgress.done()
   return config
 })
 Vue.prototype.$http = axios
